@@ -83,6 +83,7 @@ function App() {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setInstallPrompt(e);
+      setTimeout(() => setSheet("install"), 1000);
     };
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     return () => {
@@ -96,6 +97,7 @@ function App() {
     const { outcome } = await installPrompt.userChoice;
     if (outcome === 'accepted') {
       setInstallPrompt(null);
+      setSheet(null);
     }
   };
 
@@ -208,15 +210,6 @@ function App() {
       </div>
       
       <div className="container">
-        {installPrompt && (
-          <div style={{ background: 'var(--white)', border: '4px solid var(--pink-dark)', padding: '1.2rem', textAlign: 'center', borderRadius: '8px', marginBottom: '1.5rem', position: 'relative', zIndex: 20, boxShadow: '0 8px 0 rgba(0,0,0,0.1)' }}>
-            <p style={{ fontSize: '0.75rem', color: 'var(--ink)', marginBottom: '1rem', lineHeight: 1.6 }}>¿Quieres instalar esta app en tu celular para acceder más rápido?</p>
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-              <button className="btn pink" onClick={handleInstallClick} style={{ padding: '0.8rem', fontSize: '0.7rem', flex: 1, margin: 0 }}>INSTALAR</button>
-              <button className="btn" style={{ background: 'var(--panel)', color: 'var(--ink)', padding: '0.8rem', fontSize: '0.7rem', flex: 1, margin: 0 }} onClick={() => setInstallPrompt(null)}>AHORA NO</button>
-            </div>
-          </div>
-        )}
         <div className="card">
         <img src="/kirby.png" className="kirby-sprite" alt="Kirby" />
         
@@ -310,6 +303,24 @@ function App() {
                 {mensajeActual.texto.split("\n\n").map((parrafo, index) => (
                   <p key={index}>{parrafo}</p>
                 ))}
+              </div>
+            </>
+          )}
+
+          {sheet === "install" && installPrompt && (
+            <>
+              <div className="sheet-kicker">
+                <Flower2 size={22} />
+                <span>INSTALACIÓN</span>
+                <Flower2 size={22} />
+              </div>
+              <h2 id="sheet-title">Añadir App</h2>
+              <div className="sheet-message" style={{ textAlign: 'center' }}>
+                <p>¿Quieres instalar esta página como aplicación en tu celular para acceder más rápido y sin conexión?</p>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '2rem' }}>
+                  <button className="btn pink" onClick={handleInstallClick} style={{ flex: 1, padding: '1rem', fontSize: '0.8rem', margin: 0 }}>INSTALAR</button>
+                  <button className="btn" style={{ background: 'var(--panel)', color: 'var(--ink)', flex: 1, padding: '1rem', fontSize: '0.8rem', margin: 0 }} onClick={() => setSheet(null)}>AHORA NO</button>
+                </div>
               </div>
             </>
           )}
